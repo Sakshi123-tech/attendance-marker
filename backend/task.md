@@ -1,0 +1,30 @@
+# Task Checklist - Smart Attendance Backend Implementation
+
+- [x] **Phase 1: Project Initialization & Configuration**
+  - [x] Initialize `package.json` with scripts & dependencies
+  - [x] Create `.env` and `.env.example`
+  - [x] Initialize project directories (`config`, `controllers`, `middleware`, `models`, `routes`, `services`, `utils`, `sockets`, `cron`, `validators`)
+- [x] **Phase 2: Core Configurations & Helpers**
+  - [x] Database config in `config/db.js`
+  - [x] Operational error class `utils/AppError.js`
+  - [x] Async error wrapper `utils/catchAsync.js`
+  - [x] JWT utilities `utils/jwtUtils.js`
+- [x] **Phase 3: Database Models**
+  - [x] Create `models/User.js` with password hashing & comparison
+- [x] **Phase 4: Security, Middlewares, & Validators**
+  - [x] Global error handler & 404 handler in `middleware/errorMiddleware.js`
+  - [x] Rate limiting middleware in `middleware/rateLimiter.js`
+  - [x] Authentication & Role-based access middleware in `middleware/authMiddleware.js`
+  - [x] Input validation logic in `validators/authValidator.js`
+- [x] **Phase 5: Supporting Services (Email, Cron, Sockets)**
+  - [x] Nodemailer service in `services/emailService.js`
+  - [x] Custom socket manager in `sockets/socketManager.js`
+  - [x] Scheduled cron-like reporting tasks in `cron/scheduler.js`
+- [x] **Phase 6: Auth Logic, Routing, and bootstrapping**
+  - [x] Super Admin bootstrap script `utils/bootstrap.js`
+  - [x] Auth controller methods in `controllers/authController.js`
+  - [x] Auth route definitions in `routes/authRoutes.js`
+- [x] **Phase 7: Main App Setup & Verification**
+  - [x] Base Express setup in `app.js`
+  - [x] Server bootloader and socket binding in `server.js`
+  - [x] Verify server starts up and bootstraps initial admin

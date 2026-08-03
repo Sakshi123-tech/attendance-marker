@@ -1,0 +1,10 @@
+.git
+node_modules
+.env
+dist
+build
+coverage
+logs
+DockerData
+.vscode
+.DS_Store
