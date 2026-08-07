@@ -30,6 +30,7 @@ const sendTokenResponse = (user, statusCode, req, res) => {
   // Enable Secure flag (HTTPS only) in production environment
   if (process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https') {
     cookieOptions.secure = true;
+    cookieOptions.sameSite = 'none'; // Required for cross-site cookies
   }
 
   // 3. Attach token to cookie
