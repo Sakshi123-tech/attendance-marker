@@ -3,6 +3,7 @@ import { Activity, Search, Filter, ShieldAlert, UserPlus, LogIn, CheckCircle } f
 import Table from '../../../components/common/Table';
 import SearchBar from '../../../components/common/SearchBar';
 import Button from '../../../components/common/Button';
+import CustomDropdown from '../../../components/common/CustomDropdown';
 
 import { fetchSystemLogs } from '../../../api/systemLogApi';
 
@@ -97,18 +98,19 @@ const SystemLogsPage = () => {
       <div className="flex flex-col sm:flex-row gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search events or users..." />
         
-        <div className="sm:w-48">
-          <select
+        <div className="sm:w-52">
+          <CustomDropdown
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
-          >
-            <option value="ALL">All Events</option>
-            <option value="SECURITY">Security</option>
-            <option value="USER_MGMT">User Management</option>
-            <option value="AUTH">Authentication</option>
-            <option value="SYSTEM">System</option>
-          </select>
+            onChange={setFilterType}
+            options={[
+              { value: 'ALL', label: 'All Events' },
+              { value: 'SECURITY', label: 'Security' },
+              { value: 'USER_MGMT', label: 'User Management' },
+              { value: 'AUTH', label: 'Authentication' },
+              { value: 'SYSTEM', label: 'System' }
+            ]}
+            className="w-full"
+          />
         </div>
       </div>
 

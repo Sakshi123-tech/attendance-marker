@@ -4,6 +4,8 @@ import { useAuth } from '../../../context/AuthContext';
 import { CalendarDays, Plus, Clock, FileText, CheckCircle, XCircle } from 'lucide-react';
 import FormInput from '../../../components/common/FormInput';
 import Button from '../../../components/common/Button';
+import CustomDropdown from '../../../components/common/CustomDropdown';
+import DatePicker from '../../../components/common/DatePicker';
 
 const MyLeaves = () => {
   const { user } = useAuth();
@@ -165,36 +167,38 @@ const MyLeaves = () => {
             <form onSubmit={handleApply} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Leave Type</label>
-                <select 
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
+                <CustomDropdown
                   value={applyForm.type}
-                  onChange={e => setApplyForm({...applyForm, type: e.target.value})}
-                  required
-                >
-                  <option value="CASUAL">Casual</option>
-                  <option value="SICK">Sick</option>
-                  <option value="PAID">Paid</option>
-                  <option value="WFH">Work From Home (WFH)</option>
-                  <option value="MATERNITY">Maternity</option>
-                </select>
+                  onChange={(val) => setApplyForm({ ...applyForm, type: val })}
+                  options={[
+                    { value: 'CASUAL', label: 'Casual' },
+                    { value: 'SICK', label: 'Sick' },
+                    { value: 'PAID', label: 'Paid' },
+                    { value: 'WFH', label: 'Work From Home (WFH)' },
+                    { value: 'MATERNITY', label: 'Maternity' }
+                  ]}
+                  className="w-full"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <FormInput 
-                  label="Start Date" 
-                  name="startDate" 
-                  type="date"
-                  value={applyForm.startDate} 
-                  onChange={e => setApplyForm({...applyForm, startDate: e.target.value})}
-                  required 
-                />
-                <FormInput 
-                  label="End Date" 
-                  name="endDate" 
-                  type="date"
-                  value={applyForm.endDate} 
-                  onChange={e => setApplyForm({...applyForm, endDate: e.target.value})}
-                  required 
-                />
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Start Date</label>
+                  <DatePicker
+                    value={applyForm.startDate}
+                    onChange={(val) => setApplyForm({ ...applyForm, startDate: val })}
+                    placeholder="Select start date"
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">End Date</label>
+                  <DatePicker
+                    value={applyForm.endDate}
+                    onChange={(val) => setApplyForm({ ...applyForm, endDate: val })}
+                    placeholder="Select end date"
+                    className="w-full"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Reason</label>

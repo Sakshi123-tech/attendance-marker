@@ -38,7 +38,9 @@ apiClient.interceptors.response.use(
       }
     } else if (error.response && error.response.status === 403) {
       console.warn('[API Client] Forbidden request detected (403). Redirecting to unauthorized...');
-      if (typeof window !== 'undefined' && window.location.pathname !== '/unauthorized') {
+      const loginPaths = ['/login', '/portal-login', '/setup-account', '/forgot-password', '/reset-password'];
+      const isLoginFlow = typeof window !== 'undefined' && loginPaths.some(p => window.location.pathname.startsWith(p));
+      if (typeof window !== 'undefined' && window.location.pathname !== '/unauthorized' && !isLoginFlow) {
         window.location.href = '/unauthorized';
       }
     }

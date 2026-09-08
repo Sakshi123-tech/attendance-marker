@@ -86,9 +86,7 @@ const DashboardLayout = () => {
               { name: 'User List', path: '/admin/employees/list' },
             ],
           },
-          { name: 'Attendance Monitor', path: '/admin/attendance', icon: Clock },
-          { name: 'Late Employees', path: '/admin/late-employees', icon: AlertTriangle },
-          { name: 'Face Registration', path: '/admin/face-registration', icon: Fingerprint },
+          { name: 'Attendance Monitoring', path: '/admin/attendance', icon: Clock },
           { name: 'Register My Face', path: '/admin/register-my-face', icon: Fingerprint },
           { name: 'Department Analytics', path: '/admin/department', icon: BarChart3 },
           { name: 'Kiosk Monitoring', path: '/admin/kiosks', icon: Monitor },
@@ -99,14 +97,14 @@ const DashboardLayout = () => {
         return [
           { name: 'Dashboard', path: '/hr', icon: LayoutDashboard },
           { name: 'Employee Directory', path: '/hr/employees/list', icon: Users },
-          { name: 'Attendance', path: '/hr/attendance', icon: UserCheck },
-          { name: 'Attendance History', path: '/hr/attendance-history', icon: Clock },
-          { name: 'Face Registration', path: '/hr/face-registration', icon: Fingerprint },
+          { name: 'Attendance Monitoring', path: '/hr/attendance', icon: Clock },
           { name: 'Register My Face', path: '/hr/register-my-face', icon: Fingerprint },
           { name: 'Leave Management', path: '/hr/leaves', icon: FileText },
           { name: 'Department Overview', path: '/hr/department', icon: BarChart3 },
           { name: 'Reports', path: '/hr/reports', icon: FileText },
+          { name: 'Settings', path: '/hr/settings', icon: Settings },
         ];
+
       case 'EMPLOYEE':
         return [
           { name: 'Dashboard', path: '/employee', icon: LayoutDashboard },
@@ -225,11 +223,10 @@ const DashboardLayout = () => {
                 <div key={link.name}>
                   {/* Group header — not clickable, just label */}
                   <div
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium ${
-                      isAnyChildActive
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium ${isAnyChildActive
                         ? 'bg-white/10 text-white'
                         : 'text-slate-300'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center space-x-3">
                       <Icon className={`w-4 h-4 ${isAnyChildActive ? 'text-indigo-400' : 'text-slate-400'}`} />
@@ -246,11 +243,10 @@ const DashboardLayout = () => {
                           key={child.path}
                           to={child.path}
                           onClick={() => setSidebarOpen(false)}
-                          className={`block px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
-                            isChildActive
+                          className={`block px-3 py-2 rounded-lg text-sm transition-all duration-150 ${isChildActive
                               ? 'bg-indigo-500/20 text-indigo-300 font-semibold'
                               : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                          }`}
+                            }`}
                         >
                           {child.name}
                         </Link>
@@ -269,8 +265,8 @@ const DashboardLayout = () => {
                 to={link.path}
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-medium ${isActive
-                    ? 'bg-indigo-500/20 text-indigo-300 shadow-sm border border-indigo-500/20'
-                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                  ? 'bg-indigo-500/20 text-indigo-300 shadow-sm border border-indigo-500/20'
+                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   }`}
               >
                 <div className="flex items-center space-x-3">
@@ -358,7 +354,7 @@ const DashboardLayout = () => {
         </header>
 
         {/* Dynamic Nested Content Area */}
-        <main className="flex-1 overflow-hidden flex flex-col bg-slate-50 p-6">
+        <main className="flex-1 overflow-y-auto no-scrollbar flex flex-col bg-slate-50 p-6">
           <Outlet />
         </main>
       </div>
