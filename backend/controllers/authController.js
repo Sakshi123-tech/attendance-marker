@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const User = require('../models/User');
+const SystemLog = require('../models/SystemLog');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const { sendTokenResponse } = require('../utils/jwtUtils');
@@ -333,6 +334,26 @@ const recoverPassword = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * @desc    Get current user's own authentication activity (login, logout, password changes)
+ * @route   GET /api/v1/auth/my-activity
+ * @access  Private (all authenticated roles)
+ */
+const getMyActivity = catchAsync(async (req, res, next) => {
+  const logs = await SystemLog.find({
+    user: req.user._id,
+    type: 'AUTH'
+  })
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .select('action type createdAt details');
+
+  res.status(200).json({
+    status: 'success',
+    data: { logs }
+  });
+});
+
 module.exports = {
   login,
   setupAccount,
@@ -341,5 +362,6 @@ module.exports = {
   logout,
   forgotPassword,
   resetPassword,
-  recoverPassword
+  recoverPassword,
+  getMyActivity
 };

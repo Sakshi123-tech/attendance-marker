@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, setupAccount, verifySetupToken, getMe, logout, forgotPassword, resetPassword, recoverPassword } = require('../controllers/authController');
+const { login, setupAccount, verifySetupToken, getMe, logout, forgotPassword, resetPassword, recoverPassword, getMyActivity } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { validateLogin, validateSetupAccount } = require('../validators/authValidator');
 const { authLimiter } = require('../middleware/rateLimiter');
@@ -20,5 +20,6 @@ router.post('/recover-password', recoverPassword);
 router.post('/logout', protect, logout);
 router.get('/me', protect, getMe);
 router.post('/reset-password', protect, resetPassword);
+router.get('/my-activity', protect, getMyActivity);
 
 module.exports = router;
