@@ -5,6 +5,7 @@ import { downloadCSV } from '../../../api/reportApi';
 import SearchBar from '../../../components/common/SearchBar';
 import EmptyState from '../../../components/common/EmptyState';
 import Button from '../../../components/common/Button';
+import DatePicker from '../../../components/common/DatePicker';
 import toast from 'react-hot-toast';
 
 const LateEmployeesPage = () => {
@@ -84,15 +85,21 @@ const LateEmployeesPage = () => {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
         <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search by employee name..." />
-        <div className="flex gap-2 items-center">
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
-            className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 text-sm focus:outline-none focus:border-amber-500"
+        <div className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
+          <DatePicker
+            value={dateFrom}
+            onChange={setDateFrom}
+            placeholder="From date"
+            className="w-full sm:w-40"
           />
-          <span className="text-slate-500 text-sm">to</span>
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
-            className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 text-sm focus:outline-none focus:border-amber-500"
+          <span className="text-slate-400 text-xs font-semibold uppercase px-1">to</span>
+          <DatePicker
+            value={dateTo}
+            onChange={setDateTo}
+            placeholder="To date"
+            className="w-full sm:w-40"
           />
         </div>
       </div>

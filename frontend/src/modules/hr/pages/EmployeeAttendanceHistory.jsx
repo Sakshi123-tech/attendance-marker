@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, User, Search, Clock, AlertCircle } from 'lucide-react';
 import { fetchEmployees } from '../../../api/employeeApi';
 import { fetchEmployeeAttendance } from '../../../api/attendanceApi';
+import CustomDropdown from '../../../components/common/CustomDropdown';
 import { useAuth } from '../../../context/AuthContext';
 
 const EmployeeAttendanceHistory = () => {
@@ -109,19 +110,19 @@ const EmployeeAttendanceHistory = () => {
       </div>
 
       {/* Employee Selector */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
-        <div className="w-full sm:w-96 relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-          <select
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row gap-4 items-center">
+        <div className="w-full sm:w-96">
+          <CustomDropdown
             value={selectedEmployeeId}
-            onChange={(e) => setSelectedEmployeeId(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 appearance-none font-medium text-sm transition-colors"
-          >
-            <option value="">-- Select an Employee --</option>
-            {employees.map(emp => (
-              <option key={emp._id} value={emp._id}>{emp.fullName} ({emp.employeeId})</option>
-            ))}
-          </select>
+            onChange={setSelectedEmployeeId}
+            placeholder="Select an Employee..."
+            options={employees.map((emp) => ({
+              value: emp._id,
+              label: `${emp.fullName} (${emp.employeeId})`
+            }))}
+            icon={User}
+            className="w-full"
+          />
         </div>
       </div>
 

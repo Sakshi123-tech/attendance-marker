@@ -62,7 +62,9 @@ const LoginPage = () => {
           navigate('/kiosk');
           break;
         default:
-          navigate('/unauthorized');
+          setError('Your account role is not recognized. Please contact your administrator.');
+          setLoading(false);
+          return;
       }
     } catch (err) {
       const serverMessage = err.response?.data?.message || 'Invalid credentials or connection failure.';

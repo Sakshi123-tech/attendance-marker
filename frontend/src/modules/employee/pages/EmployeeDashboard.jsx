@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { 
-  Calendar, CheckCircle, Clock, UserCheck, 
-  Fingerprint, FileText, User, Bell, ChevronRight, AlertCircle
+  Calendar, CheckCircle, Clock, 
+  Fingerprint, FileText, User, AlertCircle 
 } from 'lucide-react';
-import { fetchMyHistory, fetchAttendanceStats } from '../../../api/attendanceApi';
+import { fetchMyHistory } from '../../../api/attendanceApi';
 import StatsCard from '../../../components/common/StatsCard';
+import DashboardWelcomeBanner from '../../../components/common/DashboardWelcomeBanner';
 
 const EmployeeDashboard = () => {
   const { user } = useAuth();
@@ -104,28 +105,23 @@ const EmployeeDashboard = () => {
       
       {/* Welcome & Today Status */}
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="lg:w-2/3 relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-8 shadow-sm">
-          <div className="absolute right-0 top-0 w-80 h-80 bg-blue-50 rounded-full blur-[80px] pointer-events-none" />
-          <div className="relative z-10 space-y-2">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wider">
-              Employee Portal
-            </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Hello, {user?.fullName}!
-            </h2>
-            <p className="text-sm text-slate-500 max-w-xl">
-              Welcome to your personal dashboard. Manage your attendance, leaves, and profile settings from here.
-            </p>
-          </div>
+        <div className="lg:w-2/3">
+          <DashboardWelcomeBanner
+            badge="Employee Portal"
+            title={`Hello, ${user?.fullName || 'Employee'}!`}
+            subtitle="Welcome to your personal dashboard. Manage your attendance, leaves, and profile settings from here."
+          />
         </div>
 
-        <div className="lg:w-1/3 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-center items-center text-center">
-          <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Today's Status</h3>
+        <div className="lg:w-1/3 bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-center items-center text-center shadow-xs">
+          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Today's Status</h3>
           <StatusBadge status={metrics.todayStatus} />
-          {metrics.todayCheckIn && (
+          {metrics.todayCheckIn ? (
             <p className="mt-4 text-3xl font-black text-slate-800 font-mono">
               {new Date(metrics.todayCheckIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
+          ) : (
+            <p className="mt-4 text-xl font-bold text-slate-400">Not Checked In</p>
           )}
           <p className="text-xs text-slate-400 mt-2 font-medium">Check-in Time</p>
         </div>
@@ -139,18 +135,58 @@ const EmployeeDashboard = () => {
       )}
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard title="Attendance %" value={`${metrics.attendancePercent}%`} icon={CheckCircle} colorClass="text-emerald-500 bg-emerald-50 border border-emerald-100" loading={loading} />
-        <StatsCard title="Late %" value={`${metrics.latePercent}%`} icon={Clock} colorClass="text-amber-500 bg-amber-50 border border-amber-100" loading={loading} />
-        <StatsCard title="Total Working Days" value={metrics.totalWorkingDays} icon={Calendar} colorClass="text-indigo-500 bg-indigo-50 border border-indigo-100" loading={loading} />
-        <StatsCard title="Days Absent" value={metrics.absentCount} icon={AlertCircle} colorClass="text-red-500 bg-red-50 border border-red-100" loading={loading} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatsCard 
+          title="Attendance %" 
+          value={`${metrics.attendancePercent}%`} 
+          icon={CheckCircle} 
+          watermarkIcon={CheckCircle}
+          colorClass="text-emerald-600 bg-emerald-100" 
+          accentColor="#10b981" 
+          bgGradient="bg-gradient-to-br from-emerald-50/70 via-white to-emerald-50/20"
+          trend={{ text: '↑ 0%', label: 'Current period', isPositive: true }}
+          loading={loading} 
+        />
+        <StatsCard 
+          title="Late %" 
+          value={`${metrics.latePercent}%`} 
+          icon={Clock} 
+          watermarkIcon={Clock}
+          colorClass="text-amber-600 bg-amber-100" 
+          accentColor="#f59e0b" 
+          bgGradient="bg-gradient-to-br from-amber-50/70 via-white to-amber-50/20"
+          trend={{ text: '→ 0%', label: 'Current period', colorClass: 'text-slate-500 font-semibold' }}
+          loading={loading} 
+        />
+        <StatsCard 
+          title="Total Working Days" 
+          value={metrics.totalWorkingDays} 
+          icon={Calendar} 
+          watermarkIcon={Calendar}
+          colorClass="text-blue-600 bg-blue-100" 
+          accentColor="#3b82f6" 
+          bgGradient="bg-gradient-to-br from-blue-50/70 via-white to-blue-50/20"
+          trend={{ text: '↑ 0%', label: 'Total recorded', isPositive: true }}
+          loading={loading} 
+        />
+        <StatsCard 
+          title="Days Absent" 
+          value={metrics.absentCount} 
+          icon={AlertCircle} 
+          watermarkIcon={AlertCircle}
+          colorClass="text-rose-600 bg-rose-100" 
+          accentColor="#ef4444" 
+          bgGradient="bg-gradient-to-br from-rose-50/70 via-white to-rose-50/20"
+          trend={{ text: '→ 0%', label: 'Days unexcused', colorClass: 'text-slate-500 font-semibold' }}
+          loading={loading} 
+        />
       </div>
 
       {/* Bottom Grid: Quick Actions & Upcoming Holidays */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Quick Actions */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col shadow-xs">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Quick Actions</h3>
           </div>
@@ -168,14 +204,14 @@ const EmployeeDashboard = () => {
         </div>
 
         {/* Upcoming Holidays */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col shadow-xs">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Upcoming Holidays</h3>
-            <span className="text-xs text-slate-500">Current Year</span>
+            <span className="text-xs text-slate-500 font-medium">Current Year</span>
           </div>
           <div className="p-6 flex-1 flex flex-col justify-center">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-100 flex flex-col items-center justify-center text-blue-700">
                     <span className="text-[10px] font-bold uppercase leading-none">Aug</span>
@@ -186,10 +222,10 @@ const EmployeeDashboard = () => {
                     <p className="text-xs text-slate-500">National Holiday</p>
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">38 Days</span>
+                <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">38 Days</span>
               </div>
               
-              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-100 flex flex-col items-center justify-center text-emerald-700">
                     <span className="text-[10px] font-bold uppercase leading-none">Oct</span>
@@ -200,7 +236,7 @@ const EmployeeDashboard = () => {
                     <p className="text-xs text-slate-500">National Holiday</p>
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-slate-500">Upcoming</span>
+                <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">Upcoming</span>
               </div>
             </div>
           </div>
