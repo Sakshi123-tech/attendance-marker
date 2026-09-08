@@ -15,6 +15,7 @@ const { globalLimiter } = require('./middleware/rateLimiter');
 const { globalErrorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // 1. Enable Security Headers via Helmet
 app.use(helmet());
