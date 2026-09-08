@@ -1,28 +1,31 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
 /**
- * Global Pagination Component
- * Matches reference image: "Showing 1–09 of 78 < 1 ∨ >"
- *
- * @param {number} currentPage - Current active page (1-indexed)
- * @param {number} totalItems  - Total number of items
- * @param {number} pageSize    - Items per page
- * @param {function} onPageChange - Callback with new page number
- * @param {number[]} pageSizeOptions - Optional array of page size choices
- * @param {function} onPageSizeChange - Callback when page size changes
+ * Global Pagination Component with sleek Shadcn-style rounded Page selector
  */
 const Pagination = ({
   currentPage = 1,
   totalItems = 0,
   pageSize = 9,
   onPageChange,
-  pageSizeOptions,
-  onPageSizeChange,
 }) => {
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const start = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const end = Math.min(currentPage * pageSize, totalItems);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   if (totalItems === 0) return null;
 
@@ -37,50 +40,70 @@ const Pagination = ({
   return (
     <div className="flex items-center justify-end gap-3 text-sm text-slate-600 select-none">
       {/* Showing X–Y of Z */}
-      <span className="whitespace-nowrap">
+      <span className="whitespace-nowrap text-xs text-slate-500 font-medium">
         Showing{' '}
-        <span className="font-semibold text-slate-800">
+        <span className="font-bold text-slate-800">
           {start}–{String(end).padStart(2, '0')}
         </span>{' '}
         of{' '}
-        <span className="font-semibold text-slate-800">{totalItems}</span>
+        <span className="font-bold text-slate-800">{totalItems}</span>
       </span>
 
       {/* Prev Arrow */}
       <button
+        type="button"
         onClick={handlePrev}
         disabled={currentPage === 1}
-        className="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
       >
-        <ChevronLeft size={14} />
+        <ChevronLeft size={14} className="text-slate-600" />
       </button>
 
-      {/* Page number dropdown */}
-      <div className="relative">
-        <select
-          value={currentPage}
-          onChange={(e) => onPageChange(Number(e.target.value))}
-          className="appearance-none pl-2 pr-6 py-1 text-sm font-semibold border border-slate-200 rounded bg-white hover:bg-slate-50 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+      {/* Custom Shadcn-style Page number dropdown */}
+      <div className="relative" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold border border-slate-200 rounded-lg bg-white hover:bg-slate-50 text-slate-700 transition-colors shadow-2xs cursor-pointer"
         >
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-        <ChevronRight
-          size={12}
-          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none"
-        />
+          <span>{currentPage}</span>
+          <ChevronDown size={11} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {isOpen && (
+          <div 
+            className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 min-w-[60px] max-h-44 overflow-y-auto no-scrollbar bg-white rounded-xl shadow-xl border border-slate-100 z-50 p-1 animate-in fade-in-0 zoom-in-95 duration-150"
+            style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.12)' }}
+          >
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => {
+                  onPageChange(p);
+                  setIsOpen(false);
+                }}
+                className={`w-full text-center py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                  p === currentPage 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Next Arrow */}
       <button
+        type="button"
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className="w-7 h-7 flex items-center justify-center rounded border border-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
       >
-        <ChevronRight size={14} />
+        <ChevronRight size={14} className="text-slate-600" />
       </button>
     </div>
   );

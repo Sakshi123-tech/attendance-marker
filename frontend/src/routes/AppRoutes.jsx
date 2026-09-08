@@ -53,6 +53,7 @@ const Documents = lazy(() => import('../modules/employee/pages/Documents'));
 const MyProfile = lazy(() => import('../modules/employee/pages/MyProfile'));
 const Settings = lazy(() => import('../modules/employee/pages/Settings'));
 const ChangePassword = lazy(() => import('../modules/employee/pages/ChangePassword'));
+const SecuritySettings = lazy(() => import('../components/common/SecuritySettings'));
 
 /**
  * Loading fallback view
@@ -143,7 +144,7 @@ const AppRoutes = () => {
             <Route path="/super-admin/kiosks" element={<KioskListPage />} />
             <Route path="/super-admin/register-my-face" element={<RegisterFace />} />
             <Route path="/super-admin/logs" element={<SystemLogsPage />} />
-            <Route path="/super-admin/settings" element={<div className="text-sm font-mono text-slate-500">Super Admin Settings Placeholder</div>} />
+            <Route path="/super-admin/settings" element={<SecuritySettings />} />
           </Route>
 
           {/* ADMIN */}
@@ -158,7 +159,7 @@ const AppRoutes = () => {
             <Route path="/admin/kiosks" element={<KioskMonitoringPage />} />
             <Route path="/admin/register-my-face" element={<RegisterFace />} />
             <Route path="/admin/reports" element={<ReportsPage />} />
-            <Route path="/admin/settings" element={<div className="text-sm font-mono text-slate-500">Admin Settings Placeholder</div>} />
+            <Route path="/admin/settings" element={<SecuritySettings />} />
           </Route>
 
           {/* HR */}
@@ -173,6 +174,7 @@ const AppRoutes = () => {
             <Route path="/hr/leaves" element={<LeaveManagement />} />
             <Route path="/hr/department" element={<DepartmentAnalyticsPage />} />
             <Route path="/hr/reports" element={<ReportsPage />} />
+            <Route path="/hr/settings" element={<SecuritySettings />} />
           </Route>
 
           {/* EMPLOYEE */}
@@ -185,8 +187,8 @@ const AppRoutes = () => {
             <Route path="/employee/notifications" element={<Notifications />} />
             <Route path="/employee/documents" element={<Documents />} />
             <Route path="/employee/profile" element={<MyProfile />} />
-            <Route path="/employee/settings" element={<Settings />} />
-            <Route path="/employee/change-password" element={<ChangePassword />} />
+            <Route path="/employee/settings" element={<SecuritySettings />} />
+            <Route path="/employee/change-password" element={<SecuritySettings defaultSection="password" />} />
           </Route>
 
         </Route>

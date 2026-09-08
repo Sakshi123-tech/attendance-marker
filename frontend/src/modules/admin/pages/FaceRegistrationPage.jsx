@@ -144,7 +144,6 @@ const FaceRegistrationPage = () => {
         setStatusFilter={setStatusFilter}
         statusOptions={['ALL', 'REGISTERED', 'PENDING']}
         onReset={handleResetFilters}
-        onApply={() => setCurrentPage(1)}
       />
 
       {/* Main Table */}
